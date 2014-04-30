@@ -1,100 +1,81 @@
 """
-Basic Pygame loop
-"""
-
-"""
- Simple graphics demo
+ Show how to use a sprite backed by a graphic.
 
  Sample Python/Pygame Programs
  Simpson College Computer Science
  http://programarcadegames.com/
  http://simpson.edu/computer-science/
 
+ Explanation video: http://youtu.be/vRB_983kUMc
 """
 
-# Import a library of functions called 'pygame'
 import pygame
-
-# Initialize the game engine
-pygame.init()
+head = pygame.image.load('media/head.png')
 
 # Define some colors
 BLACK    = (   0,   0,   0)
 WHITE    = ( 255, 255, 255)
-BLUE     = (   0,   0, 255)
 GREEN    = (   0, 255,   0)
 RED      = ( 255,   0,   0)
 
-PI = 3.141592653
+pygame.init()
 
-# Set the height and width of the screen
-size = (400, 500)
+# Set the width and height of the screen [width, height]
+size = (700, 500)
 screen = pygame.display.set_mode(size)
 
-pygame.display.set_caption("Tie Slap - The game where you are slap or get slapped")
+pygame.display.set_caption("Slap or be slapped")
 
 #Loop until the user clicks the close button.
 done = False
+
+# Used to manage how fast the screen updates
 clock = pygame.time.Clock()
 
-# Loop as long as done == False
-while not done:
+# Starting x position of the rect
+rect_x = 50
+rect_y = 50
 
+# Speed and direction of rectangle
+rect_change_x = 5
+rect_change_y = 5
+
+# -------- Main Program Loop -----------
+while not done:
+    # --- Main event loop
     for event in pygame.event.get(): # User did something
         if event.type == pygame.QUIT: # If user clicked close
             done = True # Flag that we are done so we exit this loop
 
-    # All drawing code happens after the for loop and but
-    # inside the main while not done loop.
+    # --- Game logic should go here
 
-    # Clear the screen and set the screen background
-    screen.fill(WHITE)
+    # --- Drawing code should go here
 
-    # Draw on the screen a line from (0,0) to (100,100)
-    # 5 pixels wide.
-    pygame.draw.line(screen, GREEN, [0, 0], [100, 100], 5)
+    # First, clear the screen to white. Don't put other drawing commands
+    # above this, or they will be erased with this command.
+    screen.fill(BLACK)
 
-    # Draw on the screen several lines from (0,10) to (100,110)
-    # 5 pixels wide using a loop
-    for y_offset in range(0, 100, 10):
-        pygame.draw.line(screen, RED, [0, 10 + y_offset], [100, 110 + y_offset], 5)
+    # Draw the rectangle
+    # pygame.draw.rect(screen, WHITE, [rect_x, rect_y, 50, 50])
+    screen.blit(head, (rect_x, rect_y))
 
+    # Move the rectangle starting point
+    rect_x += rect_change_x
+    rect_y += rect_change_y
 
-    # Draw a rectangle
-    pygame.draw.rect(screen, BLACK, [20, 20, 250, 100], 2)
+    # Bounce the rectangle if needed
+    if rect_y > 450 or rect_y < 0:
+        rect_change_y = rect_change_y * -1
+    if rect_x > 650 or rect_x < 0:
+        rect_change_x = rect_change_x * -1
 
-    # Draw an ellipse, using a rectangle as the outside boundaries
-    pygame.draw.ellipse(screen, BLACK, [20, 20, 250, 100], 2)
-
-    # Draw an arc as part of an ellipse.
-    # Use radians to determine what angle to draw.
-    pygame.draw.arc(screen, BLACK, [20, 220, 250, 200], 0, PI / 2, 2)
-    pygame.draw.arc(screen, GREEN, [20, 220, 250, 200], PI / 2, PI, 2)
-    pygame.draw.arc(screen, BLUE, [20, 220, 250, 200], PI, 3 * PI / 2, 2)
-    pygame.draw.arc(screen, RED, [20, 220, 250, 200], 3 * PI / 2, 2 * PI, 2)
-
-    # This draws a triangle using the polygon command
-    pygame.draw.polygon(screen, BLACK, [[100, 100], [0, 200], [200, 200]], 5)
-
-    # Select the font to use. Default font, 25 pt size.
-    font = pygame.font.Font(None, 25)
-
-    # Render the text. "True" means anti-aliased text.
-    # Black is the color. This creates an image of the
-    # letters, but does not put it on the screen
-    text = font.render("My text", True, BLACK)
-
-    # Put the image of the text on the screen at 250x250
-    screen.blit(text, [250, 250])
-
-    # Go ahead and update the screen with what we've drawn.
-    # This MUST happen after all the other drawing commands.
+    # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
 
-    # This limits the while loop to a max of 60 times per second.
-    # Leave this out and we will use all CPU we can.
+    # --- Limit to 60 frames per second
     clock.tick(60)
 
-
-# Be IDLE friendly
+# Close the window and quit.
+# If you forget this line, the program will 'hang'
+# on exit if running from IDLE.
 pygame.quit()
