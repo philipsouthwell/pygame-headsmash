@@ -1,5 +1,5 @@
-# Tie Slap
-I am developing *Tie Slap* as a way of learning pygame, and as my first github project.
+# Head Smash
+I am developing *Head Smash* as a way of learning pygame, and as my first github project.
 
 ## Game Concept Features
 - Control the movement of a head with your mouse
